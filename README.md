@@ -26,7 +26,7 @@ Copy the following function `save_as_file` to your code or into a DevTools conso
    * @param [ data ] - data to save, defaults to current HTML document
    * @param [ mime_type ] - MIME type for data to save as, defaults to trying to guess from file_name's extension, falling back to "text/html"
    * @returns true on success, undefined false
-   * @type { ( data?: string, mime_type?: string, file_name?:string ) => boolean | undefined }
+   * @type { ( file_name?:string, data?: string, mime_type?: string ) => boolean | undefined }
    */
   const save_as_file = function( file_name, data, mime_type ) {
     if( typeof document === 'undefined' ) throw Error( 'save_as_file: Can only be run in browsers (with document object)' )
