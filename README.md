@@ -6,12 +6,16 @@ Saving data as a file by a JavaScript command is dead simple in runtimes like No
 
 What's possible is at least to trigger a "Save as file" dialog with the data to save.
 
-The following is a traditional piece of code to construct a data link and simulate a click on it. Without explicitly passed data, the current HTML document is saved.
+The following is a traditional and easy to copy-paste to console piece of code to construct a data link and simulate a click on it. Without explicitly passed data, the current HTML document is saved.
+
+**Note that the keyword "data" here is to be understood as textual content of reasonable size** - for broader and unavoidably complexer goals you should skip to a [more elaborate alternative](#more-elaborated-alternatives).
+
+> Note: The same day that this short note was initially pushed to GitHub an article ["How to save a file"](#google-webdev-save-file) appeared on Google's web.dev that uses the well-known approach given here as a fallback for the currently only in Chrome / Edge / Opera (without iOS versions) available [showSaveFilePicker](#mdn-showsavefilepicker). The following is not stealing from Google.
 
 
 ## Installation
 
-Note that this code targets also at situations where it is not possible to import it as a module, e.g. remote debugging in closed contexts. Of course you can use it in Node / Bun for code that will be run in a browser.
+Note that this code is aimed to be small and simple to fit situations where it is not possible to import it as a module, e.g. remote debugging in closed contexts. Of course you can use it in Node / Bun for code that will be run in a browser.
 
 Copy the following function `save_as_file` to your code or into a DevTools console:
 
@@ -40,8 +44,7 @@ Copy the following function `save_as_file` to your code or into a DevTools conso
     }
     let hidden_a = document.createElement( 'a' )
     hidden_a.download = file_name
-    // ! combination of unescape + encodeURIComponent indeed essential here
-    hidden_a.href = `data:${ mime_type };base64,${ btoa( unescape( encodeURIComponent( data ) ) ) }`
+    hidden_a.href = URL.createObjectURL( new Blob( [ data ], { type: mime_type } ) )
     hidden_a.click()
     return true
   }
@@ -63,3 +66,32 @@ or
     document.querySelector( 'header' ).outerHTML
   ) 
 ```
+
+
+## Demo
+
+See [demo.html](demo.html)
+
+
+## More elaborated alternatives
+
+If your goal goes beyond saving a certain kind of data in certain amounts you should check the well established [file-server / FileSaver.js](#file-saver-eligrey) or [js-file-manager](#js-file-manager-jjv360) or [Google' reference implementation "Browser-FS-Access"](#google-browser-fs-access).
+
+
+## References
+
+###### file-saver-eligrey
+  * [file-server / FileSaver.js](https://www.npmjs.com/package/file-saver)
+
+###### google-browser-fs-access
+  * [Google Chrome Labs: Browser-FS-Access](https://www.npmjs.com/package/browser-fs-access)
+
+###### google-webdev-save-file
+  * Note: the exposition above was written before getting aware of this source
+  * [Google web.dev: How to save a file](https://web.dev/patterns/files/save-a-file)
+
+###### mdn-showSaveFilePicker
+  * [MDN: Window: showSaveFilePicker()](https://developer.mozilla.org/en-US/docs/Web/API/Window/showSaveFilePicker)
+
+###### js-file-manager-jjv360
+  * [save-file](https://www.npmjs.com/package/js-file-manager)

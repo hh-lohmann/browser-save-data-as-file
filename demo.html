@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo browser-save-date-as-file</title>
+  <script>
+    const save_as_file = function( file_name, data, mime_type ) {
+      if( typeof document === 'undefined' ) throw Error( 'save_as_file: Can only be run in browsers (with document object)' )
+      if( ! file_name ) file_name = `${ document.title }.html`
+      if( ! data ) data = '<!DOCTYPE html>\\n' + document.documentElement.innerHTML
+      if( ! mime_type ) {
+        let extension = file_name.split( '.' ).slice( -1 )[ 0 ]
+        if( extension === 'html' ) mime_type = 'text/html'
+        if( extension === 'json' ) mime_type = 'application/json'
+        if( extension === 'txt' ) mime_type = 'text/plain'
+      }
+      let hidden_a = document.createElement( 'a' )
+      hidden_a.download = file_name
+      hidden_a.href = URL.createObjectURL( new Blob( [ data ], { type: mime_type } ) )
+      hidden_a.click()
+      return true
+    }
+  </script>
+</head>
+<body>
+  <h1>
+    Demo: Saving data as a file in browsers
+  </h1>
+  <button onclick="save_as_file()">
+    Save current HTML document
+  </button>
+  <button onclick='save_as_file( `demo.json`, `{ "key": "val" }`)'>
+    Save '{ "key": "val" }' as 'demo.json' 
+  </button>
+  <button onclick="save_as_file( 'demo.txt', 'First line\nSecond line' )">
+    Save 'First line\nSecond line' as 'demo.txt' 
+  </button>
+</body>
+</html>
+
+
