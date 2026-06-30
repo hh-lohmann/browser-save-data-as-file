@@ -23,13 +23,15 @@ Copy the following function `save_as_file` to your code or into a DevTools conso
   /** Trigger "Save as file" for given data or current HTML document
    *  - Throws an error if used outside browser (= no document object)
    * @example
-   *  - save_as_file() 
-   *  - save_as_file( 'demo.json', '{ "key": "val" }' ) 
-   *  - save_as_file( 'demo.txt', 'First line\nSecond line' ) 
+   *  - save_as_file()
+   *  - save_as_file( 'demo.json', '{ "key": "val" }' )
+   *  - save_as_file( 'demo.txt', 'First line\nSecond line' )
    * @param [ file_name ] - file name to suggest for file to save, defaults to title of current HTML document + '.html'
    * @param [ data ] - data to save, defaults to current HTML document
    * @param [ mime_type ] - MIME type for data to save as, defaults to trying to guess from file_name's extension, falling back to "text/html"
    * @returns true on success, undefined false
+   * @see {@link https://hh-lohmann.github.io/browser-save-data-as-file/}
+   * @version 1.1.1
    * @type { ( file_name?:string, data?: string, mime_type?: string ) => boolean | undefined }
    */
   const save_as_file = function( file_name, data, mime_type ) {
@@ -55,7 +57,7 @@ Copy the following function `save_as_file` to your code or into a DevTools conso
 Add calls to `save_as_file` where needed into your code or into a DevTools console, e.g.
 
 ```js
-  save_as_file( 'demo.json', '{ "key": "val" }' ) 
+  save_as_file( 'demo.json', '{ "key": "val" }' )
 ```
 
 or
@@ -64,13 +66,23 @@ or
   save_as_file(
     'buggy_header.html',
     document.querySelector( 'header' ).outerHTML
-  ) 
+  )
 ```
 
 
 ## Demo
 
-See [demo.html](demo.html)
+<!-- ! HTML demo: dev vs. release switch
+  * GitHub repo view does not render HTML, so a GitHub Pages view is linked
+    * NB: GitHub Pages allows to maintain a single instance of the HTML demo file in the repo
+  * In dev a GitHub Pages view would require a Pages build for any change to check instead of live reloading, so JavaScript is utilized here to detect a dev environment and reroute the link to the local repo instance
+    * NB: JavaScript is stripped off in GitHub repo view
+    * "dev environment" is defined by using "localhost" or a numerical ID as hostname
+      * NB RegEx: `.replace( /\d/g, '' ).replaceAll( '.', '' )` instead of `location.hostname.replace( /[\d\.]/g, '' )` to avoid `[]` which may mislead Markdown parsers to read it as link syntax
+  * Unfortunately GitHub repo view displays "<script>" tags and their contents as literal content (for security), so the JavaScript here has to be pressed into an "onclick"
+-->
+See <a arial-description="Release vs. Dev switch = GitHub Pages vs. local file" href="https://hh-lohmann.github.io/browser-save-data-as-file/demo.html" onclick="if( location.hostname.replace( /\d/g, '' ).replaceAll( '.', '' ) === '' || location.hostname === 'localhost' ){ this.href='./demo.html'; alert( 'Dev environment detected - switching to local version' ); }">demo.html</a>
+
 
 
 ## More elaborated alternatives
